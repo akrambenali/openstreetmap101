@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- Nous chargeons les fichiers CDN de Leaflet. Le CSS AVANT le JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+    <style type="text/css">
+    #map {
+        /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+        height: 600px;
+    }
+    </style>
+    <title>Carte</title>
+</head>
+
+<body>
+    <div id="map">
+        <!-- Ici s'affichera la carte -->
+    </div>
+    <!-- Fichiers Javascript -->
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+    <script type="text/javascript">
+    var lat = 28.312120;
+    var lon = 3.001982;
+    var macarte = null;
+
+    var villes = {
+        "ALGEIRS": {
+            "wilaya": "ALGEIRS",
+            "lat": "36.771721",
+            "lon": "3.051760",
+            "url": "https://www.google.com/"
+        },
+        "ANNABA": {
+            "wilaya": "ANNABA",
+            "lat": "36.900162",
+            "lon": "7.765300",
+            "url": "https://www.google.com/"
+        },
+        "BATNA BISKRA": {
+            "wilaya": "BATNA BISKRA",
+            "lat": "35.544620",
+            "lon": "6.165270",
+            "url": "https://www.google.com/"
+        },
+        "BECHAR ADRAR": {
+            "wilaya": "BECHAR ADRAR",
+            "lat": "31.616180",
+            "lon": "-2.214350",
+            "url": "https://www.google.com/"
+        },
+        "CHLEF": {
+            "wilaya": "CHLEF",
+            "lat": "36.166088",
+            "lon": "1.330850",
+            "url": "https://www.google.com/"
+        },
+        "CONSTANTINE": {
+            "wilaya": "CONSTANTINE",
+            "lat": "36.351830",
+            "lon": "6.611630",
+            "url": "https://www.google.com/"
+        },
+        "DJANET": {
+            "wilaya": "DJANET",
+            "lat": "24.553920",
+            "lon": "9.485070",
+            "url": "https://www.google.com/"
+        },
+        "EL OUAD": {
+            "wilaya": "EL OUAD",
+            "lat": "33.363720",
+            "lon": "6.866510",
+            "url": "https://www.google.com/"
+        },
+        "GHARDAIA": {
+            "wilaya": "GHARDAIA",
+            "lat": "32.502570",
+            "lon": "3.683050",
+            "url": "https://www.google.com/"
+        },
+        "LAGHOUAT": {
+            "wilaya": "LAGHOUAT",
+            "lat": "33.800010",
+            "lon": "2.890250",
+            "url": "https://www.google.com/"
+        },
+        "KABYLIE": {
+            "wilaya": "KABYLIE",
+            "lat": "36.714600",
+            "lon": "4.045710",
+            "url": "https://www.google.com/"
+        },
+        "MEDEA": {
+            "wilaya": "MEDEA",
+            "lat": "36.264200",
+            "lon": "2.753860",
+            "url": "https://www.google.com/"
+        },
+        "MILA": {
+            "wilaya": "MILA",
+            "lat": "36.452830",
+            "lon": "6.266090",
+            "url": "https://www.google.com/"
+        },
+        "MSILA": {
+            "wilaya": "MSILA",
+            "lat": "35.129480",
+            "lon": "4.352850",
+            "url": "https://www.google.com/"
+        },
+        "ORAN": {
+            "wilaya": "ORAN",
+            "lat": "35.698761",
+            "lon": "-0.631560",
+            "url": "https://www.google.com/"
+        },
+        "OUARGLA": {
+            "wilaya": "OUARGLA",
+            "lat": "31.949370",
+            "lon": "5.325530",
+            "url": "https://www.google.com/"
+        },
+        "SETIF": {
+            "wilaya": "SETIF",
+            "lat": "36.185360",
+            "lon": "5.408680",
+            "url": "https://www.google.com/"
+        },
+        "SOUK AHRAS TEBASSA OUM EL BOUAGHI": {
+            "wilaya": "SOUK AHRAS TEBASSA OUM EL BOUAGHI",
+            "lat": "36.285530",
+            "lon": "7.962760",
+            "url": "https://www.google.com/"
+        },
+        "TAMANRASSET": {
+            "wilaya": "TAMANRASSET",
+            "lat": "22.786340",
+            "lon": "5.531770",
+            "url": "https://www.google.com/"
+        },
+        "TIARET": {
+            "wilaya": "TIARET",
+            "lat": "35.370020",
+            "lon": "1.322750",
+            "url": "https://www.google.com/"
+        },
+        "TLEMCEN": {
+            "wilaya": "TLEMCEN",
+            "lat": "34.883850",
+            "lon": "-1.314020",
+            "url": "https://www.google.com/"
+        },
+        "TIPAZA": {
+            "wilaya": "TIPAZA",
+            "lat": "36.591600",
+            "lon": "2.448820",
+            "url": "https://www.google.com/"
+        },
+        "BEJAIA": {
+            "wilaya": "BEJAIA",
+            "lat": "36.751880",
+            "lon": "5.053140",
+            "url": "https://www.google.com/"
+        },
+        "SKIKDA": {
+            "wilaya": "SKIKDA",
+            "lat": "36.867510",
+            "lon": "6.901010",
+            "url": "https://www.google.com/"
+        }
+    }
+    // Fonction d'initialisation de la carte
+    function initMap() {
+        // Créer l'objet "macarte" et l'insèrer dans l'élément HTML qui a l'ID "map"
+        macarte = L.map('map').setView([lat, lon], 11);
+        // Leaflet ne récupère pas les cartes (tiles) sur un serveur par défaut. Nous devons lui préciser où nous souhaitons les récupérer. Ici, openstreetmap.fr
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            // Il est toujours bien de laisser le lien vers la source des données
+            attribution: 'données © OpenStreetMap/ODbL - rendu OSM Algerie',
+            minZoom: 5,
+            maxZoom: 5
+        }).addTo(macarte);
+        // Nous parcourons la liste des villes
+        for (ville in villes) {
+            var marker = L.marker([villes[ville].lat, villes[ville].lon]).addTo(macarte);
+            marker.bindPopup('<h3><a target="_blank" href="' + villes[ville].url + '">' + ville + '</a></h3>');
+        }
+    }
+
+
+    window.onload = function() {
+        // Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
+        initMap();
+    };
+    </script>
+</body>
+
+</html>
